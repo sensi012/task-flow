@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html>
+<head><title>TaskFlow UI</title></head>
+<body>
+    <h1>TaskFlow Production Demo</h1>
+    <input type="text" id="taskName" placeholder="Enter task name" value="test-task-1">
+    <button onclick="submitTask()">Submit Task</button>
+    <p id="result"></p>
+
+    <script>
+        async function submitTask() {
+            const name = document.getElementById('taskName').value;
+            try {
+                const res = await fetch('http://localhost:8000/tasks', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ name: name })
+                });
+                const data = await res.json();
+                document.getElementById('result').innerText = JSON.stringify(data);
+            } catch (e) {
+                document.getElementById('result').innerText = "Error: " + e.message;
+            }
+        }
+    </script>
+</body>
+</html>
