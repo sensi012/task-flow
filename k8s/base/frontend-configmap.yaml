@@ -1,0 +1,78 @@
+# k8s/base/frontend-configmap.yaml
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: frontend-content
+  labels:
+    app.kubernetes.io/part-of: taskflow
+data:
+  default.conf: |
+    server {
+        listen 8080;
+        server_name localhost;
+
+        location / {
+            root /usr/share/nginx/html;
+            index index.html;
+            try_files $uri $uri/ /index.html;
+        }
+    }
+
+  index.html: |
+    <!DOCTYPE html>
+    <html>
+    <head>
+      <title>TaskFlow UI</title>
+      <style>
+        body {
+          font-family: Arial, sans-serif;
+          margin: 40px;
+        }
+        input {
+          padding: 8px;
+          width: 260px;
+        }
+        button {
+          padding: 8px 14px;
+          cursor: pointer;
+        }
+        #result {
+          margin-top: 20px;
+          padding: 12px;
+          background: #f4f4f4;
+          border-radius: 6px;
+          min-height: 20px;
+        }
+      </style>
+    </head>
+    <body>
+      <h1>TaskFlow Production Demo</h1>
+
+      <input type="text" id="taskName" placeholder="Enter task name" value="payment-processing-task" />
+      <button onclick="submitTask()">Submit Task</button>
+
+      <div id="result"></div>
+
+      <script>
+        async function submitTask() {
+          const taskName = document.getElementById("taskName").value;
+          const result = document.getElementById("result");
+
+          try {
+            const response = await fetch("http://localhost:8000/tasks", {
+              method: "POST",
+              headers: {
+                "Content-Type": "application/json"
+              },
+              body: JSON.stringify({ name: taskName })
+            });
+
+            const data = await response.json();
+            result.textContent = JSON.stringify(data, null, 2);
+          } catch (error) {
+            result.textContent = "Error: " + error.message;
+          }
+        }
+      </script>
+    </body>
+    </html>

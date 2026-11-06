@@ -1,0 +1,15 @@
+# k8s/base/db-init-configmap.yaml
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: taskflow-db-init
+  labels:
+    app.kubernetes.io/part-of: taskflow
+data:
+  init.sql: |
+    CREATE TABLE IF NOT EXISTS tasks (
+        id SERIAL PRIMARY KEY,
+        name VARCHAR(255) NOT NULL,
+        status VARCHAR(50) DEFAULT 'pending',
+        created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+    );

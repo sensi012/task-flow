@@ -2,10 +2,23 @@ import os
 import psycopg2
 import redis
 from fastapi import FastAPI, HTTPException
+from fastapi.middleware.cors import CORSMiddleware
 from pydantic import BaseModel
 from prometheus_fastapi_instrumentator import Instrumentator
 
 app = FastAPI(title="TaskFlow API")
+
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=[
+        "http://localhost:8080",
+        "http://127.0.0.1:8080",
+    ],
+    allow_credentials=False,
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
+
 # Expose Prometheus metrics at /metrics
 Instrumentator().instrument(app).expose(app, endpoint="/metrics")
 

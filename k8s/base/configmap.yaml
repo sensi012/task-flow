@@ -1,0 +1,10 @@
+# k8s/base/configmap.yaml
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: taskflow-config
+  labels:
+    app.kubernetes.io/part-of: taskflow
+data:
+  REDIS_HOST: "redis"
+  REDIS_PORT: "6379"
