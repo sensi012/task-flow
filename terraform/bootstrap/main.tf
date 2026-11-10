@@ -103,42 +103,18 @@ resource "aws_s3_bucket_lifecycle_configuration" "state" {
   }
 }
 
-resource "aws_dynamodb_table" "lock" {
-  name         = "${var.bucket_name}-lock"
-  billing_mode = "PAY_PER_REQUEST"
-  hash_key     = "LockID"
-
-  attribute {
-    name = "LockID"
-    type = "S"
-  }
-
-  tags = {
-    Name = "${var.bucket_name}-lock"
-  }
-}
-
 output "state_bucket" {
   description = "Terraform state bucket"
   value       = aws_s3_bucket.state.id
 }
 
-output "lock_table" {
-  description = "Terraform lock table"
-  value       = aws_dynamodb_table.lock.name
-}
-
 output "bootstrap_summary" {
   description = "Use these values in the dev backend configuration"
-  value = <<-EOT
+  value       = <<-EOT
     S3 bucket:
       ${aws_s3_bucket.state.id}
-
-    DynamoDB table:
-      ${aws_dynamodb_table.lock.name}
-
-    Backend example:
+      
+    Backend:
       bucket         = "${aws_s3_bucket.state.id}"
-      dynamodb_table = "${aws_dynamodb_table.lock.name}"
   EOT
 }
