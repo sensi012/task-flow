@@ -1,0 +1,30 @@
+# infra/terraform/.gitignore
+
+# Local Terraform directory
+.terraform/
+.terraform/*
+
+# State files
+*.tfstate
+*.tfstate.*
+
+# Crash logs
+crash.log
+crash.*.log
+
+# Local override files
+override.tf
+override.tf.json
+*_override.tf
+*_override.tf.json
+
+# CLI config
+.terraformrc
+terraform.rc
+
+# Sensitive local files
+*.auto.tfvars
+secrets.tfvars
+
+# Do not ignore .terraform.lock.hcl for production use.
+# It should usually be committed.
